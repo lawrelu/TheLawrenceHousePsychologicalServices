@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace TheLawrenceHousePsychologicalServices.Controllers
 {
@@ -7,44 +9,37 @@ namespace TheLawrenceHousePsychologicalServices.Controllers
     [Route("api/[controller]")]
     public class OrganisationController : ControllerBase
     {
-        // GET: api/organisation
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> GetAllOrganisations()
+        private const string LogoPath = "wwwroot/logos/";
+
+        [HttpPost("upload-logo/{organisationId}")]
+        public async Task<IActionResult> UploadLogo(int organisationId, IFormFile logo)
         {
-            // Logic to get all organisations
-            return Ok(new string[] { "Organisation1", "Organisation2" });
+            if (logo == null || logo.Length == 0)
+                return BadRequest("No logo file uploaded.");
+
+            // Image optimization logic can be added here
+            var filePath = Path.Combine(LogoPath, organisationId + Path.GetExtension(logo.FileName));
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await logo.CopyToAsync(stream);
+            }
+
+            return Ok(new { message = "Logo uploaded successfully." });
         }
 
-        // GET: api/organisation/{id}
-        [HttpGet("{id}")]
-        public ActionResult<string> GetOrganisation(int id)
+        [HttpDelete("delete-logo/{organisationId}")]
+        public IActionResult DeleteLogo(int organisationId)
         {
-            // Logic to get a specific organisation by id
-            return Ok("Organisation" + id);
-        }
+            var filePath = Path.Combine(LogoPath, organisationId + ".jpg"); // assuming jpg for simplicity
 
-        // POST: api/organisation
-        [HttpPost]
-        public ActionResult CreateOrganisation([FromBody] string organisation)
-        {
-            // Logic to create an organisation
-            return CreatedAtAction(nameof(GetOrganisation), new { id = 1 }, organisation);
-        }
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+                return Ok(new { message = "Logo deleted successfully." });
+            }
 
-        // PUT: api/organisation/{id}
-        [HttpPut("{id}")]
-        public ActionResult UpdateOrganisation(int id, [FromBody] string organisation)
-        {
-            // Logic to update an organisation
-            return NoContent();
-        }
-
-        // DELETE: api/organisation/{id}
-        [HttpDelete("{id}")]
-        public ActionResult DeleteOrganisation(int id)
-        {
-            // Logic to delete an organisation
-            return NoContent();
+            return NotFound(new { message = "Logo not found." });
         }
     }
 }
