@@ -1,93 +1,46 @@
-using Microsoft.AspNetCore.Mvc;
-using Services;
-using Models;
+using Microsoft.AspNetCore.Http;  
+using Microsoft.AspNetCore.Mvc;  
+using System.IO;  
+using System.Threading.Tasks;  
+using ImageMagick;  
 
-namespace Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ShowController : ControllerBase
-    {
-        private readonly IShowService _showService;
+namespace TheLawrenceHousePsychologicalServices.Controllers  
+{  
+    [Route("api/[controller]")]  
+    [ApiController]  
+    public class ShowController : ControllerBase  
+    {  
+        [HttpPost("upload")]  
+        public async Task<IActionResult> UploadPoster(IFormFile file)  
+        {  
+            if (file == null || file.Length == 0)  
+                return BadRequest("No file uploaded.");  
 
-        public ShowController(IShowService showService)
-        {
-            _showService = showService;
-        }
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/posters", file.FileName);  
+            using (var stream = new FileStream(filePath, FileMode.Create))  
+            {  
+                await file.CopyToAsync(stream);  
+            }  
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetShow(int id)
-        {
-            try
-            {
-                var show = await _showService.GetShowAsync(id);
-                if (show == null)
-                    return NotFound("Show not found");
-                return Ok(show);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
+            // Optimize the image  
+            using (var image = new MagickImage(filePath))  
+            {  
+                image.Resize(800, 800);  
+                image.Write(filePath);  
+            }  
 
-        [HttpPost]
-        public async Task<IActionResult> CreateShow([FromBody] Show show)
-        {
-            try
-            {
-                var createdShow = await _showService.CreateShowAsync(show);
-                return CreatedAtAction(nameof(GetShow), new { id = createdShow.Id }, createdShow);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
+            return Ok(new { filePath });  
+        }  
 
-        [HttpPut("{id}"])
-        public async Task<IActionResult> UpdateShow(int id, [FromBody] Show show)
-        {
-            try
-            {
-                show.Id = id;
-                var updatedShow = await _showService.UpdateShowAsync(show);
-                return Ok(updatedShow);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
+        [HttpDelete("delete")]  
+        public IActionResult DeletePoster(string fileName)  
+        {  
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/posters", fileName);  
+            if (!System.IO.File.Exists(filePath))  
+                return NotFound();  
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShow(int id)
-        {
-            try
-            {
-                var success = await _showService.DeleteShowAsync(id);
-                if (!success)
-                    return NotFound("Show not found");
-                return Ok(new { message = "Show deleted successfully" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpGet("organisation/{organisationId}")]
-        public async Task<IActionResult> GetShowsByOrganisation(int organisationId)
-        {
-            try
-            {
-                var shows = await _showService.GetShowsByOrganisationAsync(organisationId);
-                return Ok(shows);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-    }
-}
+            System.IO.File.Delete(filePath);  
+            return NoContent();  
+        }  
+    }  
+}  
