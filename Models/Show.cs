@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-
-namespace Stagedoor.Models {
+namespace Models {
     public class Show {
         public int Id { get; set; }
         public int OrganisationId { get; set; }
