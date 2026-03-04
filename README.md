@@ -42,4 +42,4 @@ We welcome contributions from the community! If you would like to contribute, pl
 This project is licensed under the MIT License.
 
 ## Contact
-For any inquiries, please reach out to [lawrelu@gmail.com](mailto:lawrelu@gmail.com).
+For any inquiries, please reach out to [luke@thelawrencehouse.co.uk](mailto:luke@thelawrencehouse.co.uk).
