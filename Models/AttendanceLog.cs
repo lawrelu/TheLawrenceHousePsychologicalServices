@@ -1,1 +1,15 @@
-using System;\n\nnamespace Models\n{\n    public class AttendanceLog\n    {\n        public int MemberId { get; set; }\n        public int PerformanceId { get; set; }\n        public DateTime CheckInTime { get; set; }\n        public DateTime CheckOutTime { get; set; }\n        public bool IsPresent { get; set; }\n        public string Notes { get; set; }\n    }\n}
+using System;
+
+namespace Models {
+    public class AttendanceLog {
+        public int Id { get; set; }
+        public int MemberId { get; set; }
+        public Member Member { get; set; }
+        public int PerformanceId { get; set; }
+        public Performance Performance { get; set; }
+        public DateTime CheckInTime { get; set; }
+        public DateTime? CheckOutTime { get; set; }
+        public bool IsPresent { get; set; } = true;
+        public string Notes { get; set; }
+    }
+}
