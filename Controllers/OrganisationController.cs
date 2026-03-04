@@ -1,95 +1,50 @@
 using Microsoft.AspNetCore.Mvc;
-using Services;
-using Models;
+using System.Collections.Generic;
 
-namespace Controllers
+namespace TheLawrenceHousePsychologicalServices.Controllers
 {
     [ApiController]
-    [Route("api/[controller]"])
+    [Route("api/[controller]")]
     public class OrganisationController : ControllerBase
     {
-        private readonly IOrganisationService _organisationService;
-
-        public OrganisationController(IOrganisationService organisationService)
-        {
-            _organisationService = organisationService;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOrganisation(int id)
-        {
-            try
-            {
-                var organisation = await _organisationService.GetOrganisationAsync(id);
-                if (organisation == null)
-                    return NotFound("Organisation not found");
-
-                return Ok(organisation);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateOrganisation([FromBody] Organisation organisation)
-        {
-            try
-            {
-                var createdOrganisation = await _organisationService.CreateOrganisationAsync(organisation);
-                return CreatedAtAction(nameof(GetOrganisation), new { id = createdOrganisation.Id }, createdOrganisation);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrganisation(int id, [FromBody] Organisation organisation)
-        {
-            try
-            {
-                organisation.Id = id;
-                var updatedOrganisation = await _organisationService.UpdateOrganisationAsync(organisation);
-                return Ok(updatedOrganisation);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrganisation(int id)
-        {
-            try
-            {
-                var success = await _organisationService.DeleteOrganisationAsync(id);
-                if (!success)
-                    return NotFound("Organisation not found");
-
-                return Ok(new { message = "Organisation deleted successfully" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
-        }
-
+        // GET: api/organisation
         [HttpGet]
-        public async Task<IActionResult> GetAllOrganisations()
+        public ActionResult<IEnumerable<string>> GetAllOrganisations()
         {
-            try
-            {
-                var organisations = await _organisationService.GetAllOrganisationsAsync();
-                return Ok(organisations);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { error = ex.Message });
-            }
+            // Logic to get all organisations
+            return Ok(new string[] { "Organisation1", "Organisation2" });
+        }
+
+        // GET: api/organisation/{id}
+        [HttpGet("{id}")]
+        public ActionResult<string> GetOrganisation(int id)
+        {
+            // Logic to get a specific organisation by id
+            return Ok("Organisation" + id);
+        }
+
+        // POST: api/organisation
+        [HttpPost]
+        public ActionResult CreateOrganisation([FromBody] string organisation)
+        {
+            // Logic to create an organisation
+            return CreatedAtAction(nameof(GetOrganisation), new { id = 1 }, organisation);
+        }
+
+        // PUT: api/organisation/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateOrganisation(int id, [FromBody] string organisation)
+        {
+            // Logic to update an organisation
+            return NoContent();
+        }
+
+        // DELETE: api/organisation/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteOrganisation(int id)
+        {
+            // Logic to delete an organisation
+            return NoContent();
         }
     }
 }
