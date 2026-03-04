@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-
-namespace Models
-{
-    public class Performance
-    {
+namespace Models {
+    public class Performance {
         public int Id { get; set; }
         public int ShowId { get; set; }
         public Show Show { get; set; }
