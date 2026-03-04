@@ -1,0 +1,1 @@
+using System;\n\nnamespace Models\n{\n    public class AttendanceLog\n    {\n        public int MemberId { get; set; }\n        public int PerformanceId { get; set; }\n        public DateTime CheckInTime { get; set; }\n        public DateTime CheckOutTime { get; set; }\n        public bool IsPresent { get; set; }\n        public string Notes { get; set; }\n    }\n}
