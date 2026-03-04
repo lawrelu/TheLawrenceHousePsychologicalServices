@@ -1,45 +1,42 @@
-# Attendance System Project
+# Image Upload and Optimization Features
 
 ## Overview
-The Attendance System is designed to streamline the process of recording and managing attendance in a variety of settings, such as schools, universities, and workplaces. This system aims to enhance accuracy and efficiency in attendance tracking while providing an intuitive user interface for both administrators and users.
+This section covers the image upload and optimization features available for organization logos and show posters in the application. 
 
-## Features
-- **User Authentication**: Secure login and registration for users.
-- **Attendance Tracking**: Easy recording of attendance with options for marking present, absent, or late.
-- **Reporting**: Generation of detailed attendance reports and analytics.
-- **Notifications**: Automated reminders for users regarding attendance policies and deadlines.
-- **User Management**: Admin interface for managing user accounts and roles.
+## Endpoints
+### Upload Logo
+- **Endpoint**: `/api/uploads/logo`
+- **Method**: `POST`
+- **Request Body**:
+  - `file`: The image file to upload (must be of type PNG, JPG, or JPEG)
 
-## Installation Instructions
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/lawrelu/TheLawrenceHousePsychologicalServices.git
-   ```
-2. **Navigate to Project Directory**:
-   ```bash
-   cd TheLawrenceHousePsychologicalServices
-   ```
-3. **Install Dependencies**:
-   ```bash
-   npm install  # or yarn install
-   ```
+### Upload Show Poster
+- **Endpoint**: `/api/uploads/poster`
+- **Method**: `POST`
+- **Request Body**:
+  - `file`: The image file to upload (must be of type PNG, JPG, or JPEG)
 
-## Usage Instructions
-1. Start the application:
-   ```bash
-   npm start  # or yarn start
-   ```
-2. Access the application at `http://localhost:3000`.
+## Specifications
+- **Image Size Limit**: Each uploaded image must not exceed 5 MB.
+- **Image Dimensions**: Logos should ideally be 300x300 pixels; show posters should be 1080x1920 pixels.
 
-## Contributing
-We welcome contributions from the community! If you would like to contribute, please follow these steps:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with clear messages.
-4. Push your changes and create a pull request.
+## Uploading Images
+1. Make a `POST` request to the desired endpoint.
+2. Ensure that the image file is included in the request.
+3. The server will process the image and return a response indicating success or failure.
 
-## License
-This project is licensed under the MIT License.
+## Usage Examples
+### Example for Uploading a Logo
+```bash
+curl -X POST http://localhost:3000/api/uploads/logo \ 
+-F "file=@path/to/logo.png" 
+```
 
-## Contact
-For any inquiries, please reach out to [luke@thelawrencehouse.co.uk](mailto:luke@thelawrencehouse.co.uk).
+### Example for Uploading a Show Poster
+```bash
+curl -X POST http://localhost:3000/api/uploads/poster \ 
+-F "file=@path/to/poster.jpg" 
+```
+
+## Image Optimization
+Once uploaded, images are optimized to reduce file size while maintaining quality. This includes compression techniques suitable for web application performance.
