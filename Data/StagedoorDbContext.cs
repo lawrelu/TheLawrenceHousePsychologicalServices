@@ -1,13 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace Data
-{
-    public class StagedoorDbContext : DbContext
-    {
-        public StagedoorDbContext(DbContextOptions<StagedoorDbContext> options) : base(options)
-        {
-        }
+namespace Data {
+    public class StagedoorDbContext : DbContext {
+        public StagedoorDbContext(DbContextOptions<StagedoorDbContext> options) : base(options) { }
 
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Show> Shows { get; set; }
@@ -15,8 +11,7 @@ namespace Data
         public DbSet<Member> Members { get; set; }
         public DbSet<AttendanceLog> AttendanceLogs { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Show>()
