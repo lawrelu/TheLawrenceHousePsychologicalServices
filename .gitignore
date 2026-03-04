@@ -1,0 +1,1 @@
+# Compiled files\n*.o\n*.out\n*.class\n\n# Binaries\n*.exe\n*.bin\n\n# IDE files\n.vscode/\n.idea/\n*.iml\n*.swp\n*.swo\n
